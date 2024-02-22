@@ -2,18 +2,30 @@ import { BooksApi } from './js/books-api';
 
 const booksApi = new BooksApi();
 
-const booksList = document.querySelector('.books-list');
-const topBooksList = document.querySelector('.top-books-list');
-const categoryList = document.querySelector('.category');
+const categoriesList = document.querySelector('.categories-list');
+const categoryItem = document.querySelector('.category');
 const bookItem = document.querySelector('.book-item');
 
 async function renderBooksList() {
   const categories = await booksApi.getCategories();
   const markup = categories
-    .map(({ list_name }) => `<li>${list_name}</li>`)
+    .map(
+      ({ list_name }) =>
+        `<a class="category-link" href=""><li>${list_name}</li></a>`
+    )
     .join('');
 
-  booksList.insertAdjacentHTML('beforeend', markup);
+  categoriesList.insertAdjacentHTML('beforeend', markup);
+
+  const arrOfCategories = document.querySelectorAll('.category-link');
+
+  arrOfCategories.forEach(category =>
+    category.addEventListener('click', e => {
+      e.preventDefault();
+      categoryItem.innerHTML = '';
+      renderCategory(category.textContent);
+    })
+  );
 }
 
 async function renderTopBooks() {
@@ -36,7 +48,7 @@ async function renderTopBooks() {
       .join('');
 
     const listOfTopBooks = listHeaderHTML + booksHTML;
-    topBooksList.insertAdjacentHTML('beforeend', listOfTopBooks);
+    categoryItem.insertAdjacentHTML('beforeend', listOfTopBooks);
   });
 }
 
@@ -54,7 +66,7 @@ async function renderCategory(category) {
     })
     .join('');
 
-  categoryList.insertAdjacentHTML('beforeend', markup);
+  categoryItem.insertAdjacentHTML('beforeend', markup);
 }
 
 async function renderBook(id) {
@@ -71,5 +83,5 @@ async function renderBook(id) {
 
 renderBooksList();
 renderTopBooks();
-renderCategory('Picture Books');
-renderBook('643282b2e85766588626a10c');
+// renderCategory('Picture Books');
+// renderBook('643282b2e85766588626a10c');
