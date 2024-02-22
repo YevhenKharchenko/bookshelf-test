@@ -2,20 +2,13 @@ import { BooksApi } from './js/books-api';
 
 const booksApi = new BooksApi();
 
-const categories = await booksApi.getCategories();
-const topBooks = await booksApi.getTopBooks();
-const hardcoverFiction = await booksApi.getCategory('Hardcover Nonfiction');
-const book = await booksApi.getBook('643282b1e85766588626a0c0');
-
-console.log(categories);
-console.log(topBooks);
-console.log(hardcoverFiction);
-console.log(book);
-
+// const hardcoverFiction = await booksApi.getCategory('Hardcover Nonfiction');
+// const book = await booksApi.getBook('643282b1e85766588626a0c0');
 const booksList = document.querySelector('.books-list');
 const topBooksList = document.querySelector('.top-books-list');
 
-function renderBooksList() {
+async function renderBooksList() {
+  const categories = await booksApi.getCategories();
   const markup = categories
     .map(({ list_name }) => `<li>${list_name}</li>`)
     .join('');
@@ -23,7 +16,9 @@ function renderBooksList() {
   booksList.insertAdjacentHTML('beforeend', markup);
 }
 
-function renderTopBooks() {
+async function renderTopBooks() {
+  const topBooks = await booksApi.getTopBooks();
+
   topBooks.forEach(list => {
     const listHeaderHTML = `<h2>${list.list_name}</h2>`;
 
