@@ -98,7 +98,7 @@ export function onShowCategoryBtnClick(e) {
   renderCategory(category);
 }
 
-export function onImgClick(e) {
+export function openModal(e) {
   if (e.target.nodeName !== 'IMG') return;
   e.preventDefault();
   e.stopPropagation();
@@ -146,11 +146,22 @@ export function onRemoveFromShoppingList(e) {
   element.remove();
 }
 
+// export function onRemoveFromShoppingListFromModal(e) {
+//   if (e.target.textContent !== 'Remove from shopping list') return;
+
+//   const element = e.target.parentNode;
+//   const id = element.id;
+
+//   localStorageItems.splice(id, 1);
+//   localStorage.setItem('books', JSON.stringify(localStorageItems));
+// }
+
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
-categoryItem.addEventListener('click', onImgClick);
+categoryItem.addEventListener('click', openModal);
 categoryItem.addEventListener('click', onAddToShoppingListBtn);
 shoppingList.addEventListener('click', onRemoveFromShoppingList);
+// categoryItem.addEventListener('click', onRemoveFromShoppingListFromModal);
 
 renderBooksList();
 renderTopBooks();
