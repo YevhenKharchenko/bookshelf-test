@@ -27,7 +27,7 @@ export async function renderTopBooks() {
     const listHeaderHTML = `<h2>${list.list_name}</h2>`;
     const showCategoryBtnHTML = `<button class="category-btn" data-category="${list.list_name}" type="button">See more</button>`;
 
-    const booksHTML = list.books
+    const markup = list.books
       .map(book => {
         return `
         <div class="book" id="${book._id}">
@@ -40,13 +40,16 @@ export async function renderTopBooks() {
       })
       .join('');
 
-    const listOfTopBooks = listHeaderHTML + showCategoryBtnHTML + booksHTML;
+    const listOfTopBooks = listHeaderHTML + showCategoryBtnHTML + markup;
+
     categoryItem.insertAdjacentHTML('beforeend', listOfTopBooks);
   });
 }
 
 export async function renderCategory(category) {
   const booksList = await booksApi.getCategory(category);
+
+  const categoryHeaderHTML = `<h2>${category}</h2>`;
   const markup = booksList
     .map(book => {
       return `
@@ -60,7 +63,9 @@ export async function renderCategory(category) {
     })
     .join('');
 
-  categoryItem.insertAdjacentHTML('beforeend', markup);
+  const listOfCategoryBooks = categoryHeaderHTML + markup;
+
+  categoryItem.insertAdjacentHTML('beforeend', listOfCategoryBooks);
 }
 
 export async function renderBook(id) {
@@ -94,7 +99,7 @@ export function onShowCategoryBtnClick(e) {
 }
 
 export function onImgClick(e) {
-  if (e.target.nodeName != 'IMG') return;
+  if (e.target.nodeName !== 'IMG') return;
   e.preventDefault();
   e.stopPropagation();
   const id = e.target.parentNode.id;
@@ -103,7 +108,7 @@ export function onImgClick(e) {
 }
 
 export function onAddToShoppingListBtn(e) {
-  if (e.target.textContent != 'Add to shopping list') return;
+  if (e.target.textContent !== 'Add to shopping list') return;
   const id = e.target.parentNode.id;
   if (localStorageItems.includes(id)) return;
   localStorageItems.push(id);
@@ -133,10 +138,10 @@ export async function renderBookFromLocalStorage(id) {
 }
 
 export function onRemoveFromShoppingList(e) {
+  if (e.target.nodeName !== 'BUTTON') return;
   const element = e.target.parentNode;
   const id = element.id;
   localStorageItems.splice(id, 1);
-  console.log(localStorageItems);
   localStorage.setItem('books', JSON.stringify(localStorageItems));
   element.remove();
 }
