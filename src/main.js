@@ -51,11 +51,13 @@ export async function renderTopBooks() {
     const listOfTopBooks = listHeaderHTML + showCategoryBtnHTML + booksHTML;
     categoryItem.insertAdjacentHTML('beforeend', listOfTopBooks);
 
-    const categoryButtons = categoryItem.querySelectorAll('.category-btn');
-    categoryButtons.forEach(el =>
-      el.addEventListener('click', onShowCategoryBtnClick)
-    );
+    // const categoryButtons = categoryItem.querySelectorAll('.category-btn');
+    // categoryButtons.forEach(el =>
+    //   el.addEventListener('click', onShowCategoryBtnClick)
+    // );
   });
+
+  categoryItem.addEventListener('click', onShowCategoryBtnClick);
 }
 
 export async function renderCategory(category) {
@@ -88,6 +90,7 @@ export async function renderBook(id) {
 }
 
 function onShowCategoryBtnClick(e) {
+  if (!e.target.classList.contains('category-btn')) return;
   const category = e.target.dataset.category;
   categoryItem.innerHTML = '';
   renderCategory(category);
