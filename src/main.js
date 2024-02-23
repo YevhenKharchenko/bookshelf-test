@@ -4,7 +4,6 @@ const booksApi = new BooksApi();
 
 const categoriesList = document.querySelector('.categories-list');
 const categoryItem = document.querySelector('.category');
-const bookItem = document.querySelector('.book-item');
 
 export async function renderBooksList() {
   const categories = await booksApi.getCategories();
@@ -16,16 +15,6 @@ export async function renderBooksList() {
     .join('');
 
   categoriesList.insertAdjacentHTML('beforeend', markup);
-
-  const arrOfCategories = document.querySelectorAll('.category-link');
-
-  arrOfCategories.forEach(category =>
-    category.addEventListener('click', e => {
-      e.preventDefault();
-      categoryItem.innerHTML = '';
-      renderCategory(category.textContent);
-    })
-  );
 }
 
 export async function renderTopBooks() {
@@ -50,14 +39,7 @@ export async function renderTopBooks() {
 
     const listOfTopBooks = listHeaderHTML + showCategoryBtnHTML + booksHTML;
     categoryItem.insertAdjacentHTML('beforeend', listOfTopBooks);
-
-    // const categoryButtons = categoryItem.querySelectorAll('.category-btn');
-    // categoryButtons.forEach(el =>
-    //   el.addEventListener('click', onShowCategoryBtnClick)
-    // );
   });
-
-  categoryItem.addEventListener('click', onShowCategoryBtnClick);
 }
 
 export async function renderCategory(category) {
@@ -89,6 +71,13 @@ export async function renderBook(id) {
   categoryItem.insertAdjacentHTML('beforeend', markup);
 }
 
+function onGalleryItemClick(e) {
+  e.preventDefault();
+  categoryItem.innerHTML = '';
+  const category = e.target.textContent;
+  renderCategory(category);
+}
+
 function onShowCategoryBtnClick(e) {
   if (!e.target.classList.contains('category-btn')) return;
   const category = e.target.dataset.category;
@@ -104,6 +93,8 @@ function onImgLinkClick(e) {
   renderBook(id);
 }
 
+categoriesList.addEventListener('click', onGalleryItemClick);
+categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', onImgLinkClick);
 
 renderBooksList();
