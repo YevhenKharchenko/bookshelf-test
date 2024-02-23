@@ -85,9 +85,10 @@ function onShowCategoryBtnClick(e) {
   renderCategory(category);
 }
 
-function onImgLinkClick(e) {
+function onImgClick(e) {
   if (e.target.nodeName != 'IMG') return;
   e.preventDefault();
+  e.stopPropagation();
   const id = e.target.parentNode.id;
   categoryItem.innerHTML = '';
   renderBook(id);
@@ -95,7 +96,7 @@ function onImgLinkClick(e) {
 
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
-categoryItem.addEventListener('click', onImgLinkClick);
+categoryItem.addEventListener('click', onImgClick);
 
 renderBooksList();
 renderTopBooks();
