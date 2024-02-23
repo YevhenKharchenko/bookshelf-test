@@ -4,6 +4,9 @@ const booksApi = new BooksApi();
 
 const categoriesList = document.querySelector('.categories-list');
 const categoryItem = document.querySelector('.category');
+const shoppingList = document.querySelector('.shopping-list');
+
+const localStorageItems = [];
 
 export async function renderBooksList() {
   const categories = await booksApi.getCategories();
@@ -28,11 +31,11 @@ export async function renderTopBooks() {
       .map(book => {
         return `
         <div class="book" id="${book._id}">
-            <img src="${book.book_image}" alt="${book.title}">
-            <h3>${book.title}</h3>
-            <p>Author: ${book.author}</p>
-            <p>Publisher: ${book.publisher}</p>
-            <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+          <img src="${book.book_image}" alt="${book.title}">
+          <h3>${book.title}</h3>
+          <p>Author: ${book.author}</p>
+          <p>Publisher: ${book.publisher}</p>
+          <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
         </div>`;
       })
       .join('');
@@ -46,13 +49,14 @@ export async function renderCategory(category) {
   const booksList = await booksApi.getCategory(category);
   const markup = booksList
     .map(book => {
-      return `<div class="book" id="${book._id}">
-            <img src="${book.book_image}" alt="${book.title}">
-            <h3>${book.title}</h3>
-            <p>Author: ${book.author}</p>
-            <p>Publisher: ${book.publisher}</p>
-            <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
-        </div>`;
+      return `
+      <div class="book" id="${book._id}">
+        <img src="${book.book_image}" alt="${book.title}">
+        <h3>${book.title}</h3>
+        <p>Author: ${book.author}</p>
+        <p>Publisher: ${book.publisher}</p>
+        <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+      </div>`;
     })
     .join('');
 
@@ -62,30 +66,34 @@ export async function renderCategory(category) {
 export async function renderBook(id) {
   const book = await booksApi.getBook(id);
 
-  const markup = `<img src="${book.book_image}" alt="${book.title}">
-                  <h3>${book.title}</h3>
-                  <p>Author: ${book.author}</p>
-                  <p>Publisher: ${book.publisher}</p>
-                  <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>`;
+  const markup = `
+  <li id="${book._id}">
+    <img src="${book.book_image}" alt="${book.title}">
+    <h3>${book.title}</h3>
+    <p>Author: ${book.author}</p>
+    <p>Publisher: ${book.publisher}</p>
+    <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+    <button type="button">Add to shopping list</button>
+  </li>`;
 
   categoryItem.insertAdjacentHTML('beforeend', markup);
 }
 
-function onGalleryItemClick(e) {
+export function onGalleryItemClick(e) {
   e.preventDefault();
   categoryItem.innerHTML = '';
   const category = e.target.textContent;
   renderCategory(category);
 }
 
-function onShowCategoryBtnClick(e) {
+export function onShowCategoryBtnClick(e) {
   if (!e.target.classList.contains('category-btn')) return;
   const category = e.target.dataset.category;
   categoryItem.innerHTML = '';
   renderCategory(category);
 }
 
-function onImgClick(e) {
+export function onImgClick(e) {
   if (e.target.nodeName != 'IMG') return;
   e.preventDefault();
   e.stopPropagation();
@@ -94,9 +102,40 @@ function onImgClick(e) {
   renderBook(id);
 }
 
+export function onAddToShoppingListBtn(e) {
+  if (e.target.textContent != 'Add to shopping list') return;
+  const id = e.target.parentNode.id;
+  if (localStorageItems.includes(id)) return;
+  localStorageItems.push(id);
+  localStorage.setItem('books', JSON.stringify(localStorageItems));
+}
+
+export function renderShoppingList() {
+  const arrayOfBooks = JSON.parse(localStorage.getItem('books'));
+  arrayOfBooks.forEach(book => renderBookFromLocalStorage(book));
+}
+
+export async function renderBookFromLocalStorage(id) {
+  const book = await booksApi.getBook(id);
+
+  const markup = `
+  <li id="${book._id}">
+    <img src="${book.book_image}" alt="${book.title}">
+    <h3>${book.title}</h3>
+    <p>Author: ${book.author}</p>
+    <p>Publisher: ${book.publisher}</p>
+    <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+    <button type="button">Add to shopping list</button>
+  </li>`;
+
+  shoppingList.insertAdjacentHTML('beforeend', markup);
+}
+
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', onImgClick);
+categoryItem.addEventListener('click', onAddToShoppingListBtn);
 
 renderBooksList();
 renderTopBooks();
+renderShoppingList();
