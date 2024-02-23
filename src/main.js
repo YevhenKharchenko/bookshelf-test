@@ -6,7 +6,7 @@ const categoriesList = document.querySelector('.categories-list');
 const categoryItem = document.querySelector('.category');
 const bookItem = document.querySelector('.book-item');
 
-async function renderBooksList() {
+export async function renderBooksList() {
   const categories = await booksApi.getCategories();
   const markup = categories
     .map(
@@ -28,11 +28,12 @@ async function renderBooksList() {
   );
 }
 
-async function renderTopBooks() {
+export async function renderTopBooks() {
   const topBooks = await booksApi.getTopBooks();
 
   topBooks.forEach(list => {
     const listHeaderHTML = `<h2>${list.list_name}</h2>`;
+    const showCategoryBtnHTML = `<button class="category-btn" data-category="${list.list_name}" type="button">See more</button>`;
 
     const booksHTML = list.books
       .map(book => {
@@ -47,12 +48,17 @@ async function renderTopBooks() {
       })
       .join('');
 
-    const listOfTopBooks = listHeaderHTML + booksHTML;
+    const listOfTopBooks = listHeaderHTML + showCategoryBtnHTML + booksHTML;
     categoryItem.insertAdjacentHTML('beforeend', listOfTopBooks);
+
+    const categoryBtns = categoryItem.querySelectorAll('.category-btn');
+    categoryBtns.forEach(el =>
+      el.addEventListener('click', onShowCategoryBtnClick)
+    );
   });
 }
 
-async function renderCategory(category) {
+export async function renderCategory(category) {
   const booksList = await booksApi.getCategory(category);
   const markup = booksList
     .map(book => {
@@ -69,7 +75,7 @@ async function renderCategory(category) {
   categoryItem.insertAdjacentHTML('beforeend', markup);
 }
 
-async function renderBook(id) {
+export async function renderBook(id) {
   const book = await booksApi.getBook(id);
 
   const markup = `<img src="${book.book_image}" alt="${book.title}">
@@ -81,7 +87,12 @@ async function renderBook(id) {
   bookItem.insertAdjacentHTML('beforeend', markup);
 }
 
+function onShowCategoryBtnClick(e) {
+  const category = e.target.dataset.category;
+  console.log(category);
+  categoryItem.innerHTML = '';
+  renderCategory(category);
+}
+
 renderBooksList();
 renderTopBooks();
-// renderCategory('Picture Books');
-// renderBook('643282b2e85766588626a10c');
