@@ -51,8 +51,8 @@ export async function renderTopBooks() {
     const listOfTopBooks = listHeaderHTML + showCategoryBtnHTML + booksHTML;
     categoryItem.insertAdjacentHTML('beforeend', listOfTopBooks);
 
-    const categoryBtns = categoryItem.querySelectorAll('.category-btn');
-    categoryBtns.forEach(el =>
+    const categoryButtons = categoryItem.querySelectorAll('.category-btn');
+    categoryButtons.forEach(el =>
       el.addEventListener('click', onShowCategoryBtnClick)
     );
   });
@@ -84,15 +84,24 @@ export async function renderBook(id) {
                   <p>Publisher: ${book.publisher}</p>
                   <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>`;
 
-  bookItem.insertAdjacentHTML('beforeend', markup);
+  categoryItem.insertAdjacentHTML('beforeend', markup);
 }
 
 function onShowCategoryBtnClick(e) {
   const category = e.target.dataset.category;
-  console.log(category);
   categoryItem.innerHTML = '';
   renderCategory(category);
 }
+
+function onImgLinkClick(e) {
+  if (e.target.nodeName != 'IMG') return;
+  e.preventDefault();
+  const id = e.target.parentNode.id;
+  categoryItem.innerHTML = '';
+  renderBook(id);
+}
+
+categoryItem.addEventListener('click', onImgLinkClick);
 
 renderBooksList();
 renderTopBooks();
