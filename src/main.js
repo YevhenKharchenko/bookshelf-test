@@ -6,7 +6,7 @@ const categoriesList = document.querySelector('.categories-list');
 const categoryItem = document.querySelector('.category');
 const shoppingList = document.querySelector('.shopping-list');
 
-const localStorageItems = [];
+const localStorageItems = JSON.parse(localStorage.getItem('books')) || [];
 
 export async function renderBooksList() {
   const categories = await booksApi.getCategories();
@@ -112,6 +112,7 @@ export function onAddToShoppingListBtn(e) {
 
 export function renderShoppingList() {
   const arrayOfBooks = JSON.parse(localStorage.getItem('books'));
+  if (!arrayOfBooks) return;
   arrayOfBooks.forEach(book => renderBookFromLocalStorage(book));
 }
 
@@ -125,16 +126,26 @@ export async function renderBookFromLocalStorage(id) {
     <p>Author: ${book.author}</p>
     <p>Publisher: ${book.publisher}</p>
     <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
-    <button type="button">Add to shopping list</button>
+    <button type="button">Remove from shopping list</button>
   </li>`;
 
   shoppingList.insertAdjacentHTML('beforeend', markup);
+}
+
+export function onRemoveFromShoppingList(e) {
+  const element = e.target.parentNode;
+  const id = element.id;
+  localStorageItems.splice(id, 1);
+  console.log(localStorageItems);
+  localStorage.setItem('books', JSON.stringify(localStorageItems));
+  element.remove();
 }
 
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', onImgClick);
 categoryItem.addEventListener('click', onAddToShoppingListBtn);
+shoppingList.addEventListener('click', onRemoveFromShoppingList);
 
 renderBooksList();
 renderTopBooks();
