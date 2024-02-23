@@ -107,13 +107,14 @@ export function openModal(e) {
   renderBook(id);
 }
 
-export function onAddToShoppingListBtn(e) {
+export function onAddAndRemoveToShoppingListOnModal(e) {
   if (e.target.textContent === 'Add to shopping list') {
     const id = e.target.parentNode.id;
     if (localStorageItems.includes(id)) return;
     e.target.textContent = 'Remove from shopping list';
     localStorageItems.push(id);
     localStorage.setItem('books', JSON.stringify(localStorageItems));
+
     return;
   }
 
@@ -125,6 +126,7 @@ export function onAddToShoppingListBtn(e) {
       localStorageItems.splice(index, 1);
       localStorage.setItem('books', JSON.stringify(localStorageItems));
       e.target.textContent = 'Add to shopping list';
+
       return;
     }
   }
@@ -165,7 +167,7 @@ export function onRemoveFromShoppingList(e) {
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openModal);
-categoryItem.addEventListener('click', onAddToShoppingListBtn);
+categoryItem.addEventListener('click', onAddAndRemoveToShoppingListOnModal);
 shoppingList.addEventListener('click', onRemoveFromShoppingList);
 
 renderBooksList();
