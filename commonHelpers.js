@@ -15,5 +15,5 @@ import{a as c}from"./assets/vendor-0cb09735.js";(function(){const t=document.cre
                   <h3>${t.title}</h3>
                   <p>Author: ${t.author}</p>
                   <p>Publisher: ${t.publisher}</p>
-                  <a href="${t.amazon_product_url}" target="_blank">Buy on Amazon</a>`;i.insertAdjacentHTML("beforeend",r)}function y(e){e.preventDefault(),i.innerHTML="";const t=e.target.textContent;d(t)}function m(e){if(!e.target.classList.contains("category-btn"))return;const t=e.target.dataset.category;i.innerHTML="",d(t)}function L(e){if(e.target.nodeName!="IMG")return;e.preventDefault();const t=e.target.parentNode.id;i.innerHTML="",h(t)}l.addEventListener("click",y);i.addEventListener("click",m);i.addEventListener("click",L);g();f();
+                  <a href="${t.amazon_product_url}" target="_blank">Buy on Amazon</a>`;i.insertAdjacentHTML("beforeend",r)}function y(e){e.preventDefault(),i.innerHTML="";const t=e.target.textContent;d(t)}function m(e){if(!e.target.classList.contains("category-btn"))return;const t=e.target.dataset.category;i.innerHTML="",d(t)}function L(e){if(e.target.nodeName!="IMG")return;e.preventDefault(),e.stopPropagation();const t=e.target.parentNode.id;i.innerHTML="",h(t)}l.addEventListener("click",y);i.addEventListener("click",m);i.addEventListener("click",L);g();f();
 //# sourceMappingURL=commonHelpers.js.map
