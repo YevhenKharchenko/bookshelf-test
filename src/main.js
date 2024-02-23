@@ -108,11 +108,26 @@ export function openModal(e) {
 }
 
 export function onAddToShoppingListBtn(e) {
-  if (e.target.textContent !== 'Add to shopping list') return;
-  const id = e.target.parentNode.id;
-  if (localStorageItems.includes(id)) return;
-  localStorageItems.push(id);
-  localStorage.setItem('books', JSON.stringify(localStorageItems));
+  if (e.target.textContent === 'Add to shopping list') {
+    const id = e.target.parentNode.id;
+    if (localStorageItems.includes(id)) return;
+    e.target.textContent = 'Remove from shopping list';
+    localStorageItems.push(id);
+    localStorage.setItem('books', JSON.stringify(localStorageItems));
+    return;
+  }
+
+  if (e.target.textContent === 'Remove from shopping list') {
+    const id = e.target.parentNode.id;
+    const index = localStorageItems.indexOf(id);
+
+    if (index !== -1) {
+      localStorageItems.splice(index, 1);
+      localStorage.setItem('books', JSON.stringify(localStorageItems));
+      e.target.textContent = 'Add to shopping list';
+      return;
+    }
+  }
 }
 
 export function renderShoppingList() {
@@ -141,27 +156,17 @@ export function onRemoveFromShoppingList(e) {
   if (e.target.nodeName !== 'BUTTON') return;
   const element = e.target.parentNode;
   const id = element.id;
-  localStorageItems.splice(id, 1);
+  const index = localStorageItems.indexOf(id);
+  localStorageItems.splice(index, 1);
   localStorage.setItem('books', JSON.stringify(localStorageItems));
   element.remove();
 }
-
-// export function onRemoveFromShoppingListFromModal(e) {
-//   if (e.target.textContent !== 'Remove from shopping list') return;
-
-//   const element = e.target.parentNode;
-//   const id = element.id;
-
-//   localStorageItems.splice(id, 1);
-//   localStorage.setItem('books', JSON.stringify(localStorageItems));
-// }
 
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openModal);
 categoryItem.addEventListener('click', onAddToShoppingListBtn);
 shoppingList.addEventListener('click', onRemoveFromShoppingList);
-// categoryItem.addEventListener('click', onRemoveFromShoppingListFromModal);
 
 renderBooksList();
 renderTopBooks();
