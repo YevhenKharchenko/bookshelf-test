@@ -10,29 +10,49 @@ export class BooksApi {
 
   async getCategories() {
     const url = this.BASE_URL + this.CATEGORY_LIST;
-    const response = await axios.get(url);
 
-    return response.data;
+    try {
+      const response = await axios.get(url);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getTopBooks() {
     const url = this.BASE_URL + this.TOP_BOOKS;
-    const response = await axios.get(url);
 
-    return response.data;
+    try {
+      const response = await axios.get(url);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getCategory(category) {
     const url = this.BASE_URL + this.CATEGORY + category;
-    const response = await axios.get(url);
 
-    return response.data;
+    try {
+      const response = await axios.get(url);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getBook(id) {
     const url = this.BASE_URL + '/' + id;
-    const response = await axios.get(url);
 
-    return response.data;
+    try {
+      const response = await axios.get(url);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
