@@ -17,6 +17,11 @@ export class BooksApi {
       return response.data;
     } catch (error) {
       console.log(error);
+      iziToast.error({
+        title: 'Error',
+        message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+        position: 'topRight',
+      });
     }
   }
 
@@ -29,6 +34,11 @@ export class BooksApi {
       return response.data;
     } catch (error) {
       console.log(error);
+      iziToast.error({
+        title: 'Error',
+        message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+        position: 'topRight',
+      });
     }
   }
 
@@ -41,6 +51,11 @@ export class BooksApi {
       return response.data;
     } catch (error) {
       console.log(error);
+      iziToast.error({
+        title: 'Error',
+        message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+        position: 'topRight',
+      });
     }
   }
 
@@ -53,6 +68,11 @@ export class BooksApi {
       return response.data;
     } catch (error) {
       console.log(error);
+      iziToast.error({
+        title: 'Error',
+        message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+        position: 'topRight',
+      });
     }
   }
 }

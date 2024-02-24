@@ -1,6 +1,6 @@
-import { BooksApi } from './js/books-api.js';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import { BooksApi } from './books-api.js';
 
 const booksApi = new BooksApi();
 
@@ -25,6 +25,11 @@ export async function renderBooksList() {
     categoriesList.insertAdjacentHTML('beforeend', markup);
   } catch (error) {
     console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
   }
 }
 
@@ -55,6 +60,11 @@ export async function renderTopBooks() {
     });
   } catch (error) {
     console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
   }
 }
 
@@ -81,13 +91,19 @@ export async function renderCategory(category) {
     categoryItem.insertAdjacentHTML('beforeend', listOfCategoryBooks);
   } catch (error) {
     console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
   }
 }
 
 export async function renderBook(id) {
-  const book = await booksApi.getBook(id);
+  try {
+    const book = await booksApi.getBook(id);
 
-  const markup = `
+    const markup = `
   <li id="${book._id}">
     <img src="${book.book_image}" alt="${book.title}">
     <h3>${book.title}</h3>
@@ -97,7 +113,15 @@ export async function renderBook(id) {
     <button type="button">Add to shopping list</button>
   </li>`;
 
-  categoryItem.insertAdjacentHTML('beforeend', markup);
+    categoryItem.insertAdjacentHTML('beforeend', markup);
+  } catch (error) {
+    console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
+  }
 }
 
 export function onGalleryItemClick(e) {
@@ -149,9 +173,18 @@ export function onAddAndRemoveToShoppingListOnModal(e) {
 }
 
 export function renderShoppingList() {
-  const arrayOfBooks = JSON.parse(localStorage.getItem('books'));
-  if (!arrayOfBooks) return;
-  arrayOfBooks.forEach(book => renderBookFromLocalStorage(book));
+  try {
+    const arrayOfBooks = JSON.parse(localStorage.getItem('books'));
+    if (!arrayOfBooks) return;
+    arrayOfBooks.forEach(book => renderBookFromLocalStorage(book));
+  } catch (error) {
+    console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
+  }
 }
 
 export async function renderBookFromLocalStorage(id) {
@@ -171,6 +204,11 @@ export async function renderBookFromLocalStorage(id) {
     shoppingList.insertAdjacentHTML('beforeend', markup);
   } catch (error) {
     console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
   }
 }
 
