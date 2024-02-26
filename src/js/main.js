@@ -223,20 +223,11 @@ export function onRemoveFromShoppingList(e) {
 }
 
 // Додавання об'єкта книги до localStorage без реквеста на сервер
-export async function onAddAndRemoveToLocalStorage(e) {
-  // if (e.target.textContent === 'Add to shopping list') {
-  //   const id = e.target.parentNode.id;
-  //   const book = await booksApi.getBook(id);
-  //   if (localStorageItems.find(item => item.id === id)) return;
-  //   e.target.textContent = 'Remove from shopping list';
-  //   localStorageItems.push(book);
-  //   localStorage.setItem('books', JSON.stringify(localStorageItems));
-
-  //   return;
-  // }
-
+export async function onAddAndRemoveToLocalStorageOnModal(e) {
   const bookElement = e.target.closest('.book');
+
   if (!bookElement) return;
+
   const id = bookElement.id;
   const title = bookElement.querySelector('h3').textContent;
   const author = bookElement.querySelector('.author').textContent;
@@ -252,18 +243,6 @@ export async function onAddAndRemoveToLocalStorage(e) {
     book_image: bookImage,
     amazon_product_url: amazonProductUrl,
   };
-
-  // if (e.target.textContent === 'Remove from shopping list') {
-  //   const id = e.target.parentNode.id;
-  //   const index = localStorageItems.findIndex(item => item.id === id);
-  //   if (index !== -1) {
-  //     localStorageItems.splice(index, 1);
-  //     localStorage.setItem('books', JSON.stringify(localStorageItems));
-  //     e.target.textContent = 'Add to shopping list';
-
-  //     return;
-  //   }
-  // }
 
   if (e.target.textContent === 'Add to shopping list') {
     if (localStorageItems.find(item => item._id === id)) return;
@@ -317,7 +296,7 @@ export function renderBookFromLocalStorageWithoutFetch(book) {
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openModal);
-categoryItem.addEventListener('click', onAddAndRemoveToLocalStorage);
+categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
 shoppingList.addEventListener('click', onRemoveFromShoppingList);
 
 // Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
