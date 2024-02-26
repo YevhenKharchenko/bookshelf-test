@@ -1,5 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
 ul {
   list-style-type: none;
+  margin: 0;
+  padding-left: 0;
 }
 
 a {
@@ -42,6 +48,7 @@ section {
   line-height: 1.1875;
   letter-spacing: -0.04em;
   color: #111;
+  margin-bottom: 16px;
 }
 
 .delete-btn {
@@ -127,6 +134,10 @@ section {
   letter-spacing: -0.04em;
   margin-bottom: 4px;
   display: inline-block;
+  width: 144px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .shopping-list-item-category {
@@ -188,6 +199,74 @@ section {
 }
 
 @media screen and (min-width: 768px) {
+  .container {
+    width: 768px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .shopping-list-section {
+    padding-top: 40px;
+  }
+
+  .shopping-list-title {
+    font-size: 48px;
+    line-height: 1.08;
+    margin-bottom: 40px;
+  }
+
+  .shopping-list-item {
+    padding: 24px;
+    max-width: 704px;
+    width: 704px;
+  }
+
+  .delete-btn {
+    right: 24px;
+    top: 24px;
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+  }
+
+  .shopping-list-div-image {
+    width: 116px;
+    height: 165px;
+    margin-right: 24px;
+  }
+
+  .shopping-list-image {
+    max-width: 100%;
+    width: 116px;
+    height: 165px;
+  }
+
+  .shopping-list-text {
+    width: 508px;
+  }
+
+  .shopping-list-item-header {
+    width: 480px;
+  }
+
+  .shopping-list-item-category {
+    margin-bottom: 14px;
+    width: 480px;
+  }
+
+  .shopping-list-item-description {
+  }
+
+  .description-wrapper {
+    height: 75px;
+    margin-bottom: 20px;
+  }
+
+  .link-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 /* <li class="shop-list-item" data-id="${_id}">
