@@ -78,7 +78,7 @@ section {
   gap: 20px;
   padding: 0px;
   /* width: 335px; */
-  align-items: center;
+  align-items: flex-start;
 }
 
 .shopping-list-item {
