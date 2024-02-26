@@ -47,9 +47,9 @@ export async function renderTopBooks() {
         <div class="book" id="${book._id}">
           <img src="${book.book_image}" alt="${book.title}">
           <h3>${book.title}</h3>
-          <p>Author: ${book.author}</p>
-          <p>Publisher: ${book.publisher}</p>
-          <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+          <p class="author">Author: ${book.author}</p>
+          <p class="publisher"=>Publisher: ${book.publisher}</p>
+          <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
         </div>`;
         })
         .join('');
@@ -79,9 +79,9 @@ export async function renderCategory(category) {
       <div class="book" id="${book._id}">
         <img src="${book.book_image}" alt="${book.title}">
         <h3>${book.title}</h3>
-        <p>Author: ${book.author}</p>
-        <p>Publisher: ${book.publisher}</p>
-        <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+        <p class="author">Author: ${book.author}</p>
+        <p class="publisher">Publisher: ${book.publisher}</p>
+        <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
       </div>`;
       })
       .join('');
@@ -104,12 +104,12 @@ export async function renderBook(id) {
     const book = await booksApi.getBook(id);
 
     const markup = `
-  <li id="${book._id}">
+  <li class="book" id="${book._id}">
     <img src="${book.book_image}" alt="${book.title}">
     <h3>${book.title}</h3>
-    <p>Author: ${book.author}</p>
-    <p>Publisher: ${book.publisher}</p>
-    <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+    <p class="author">Author: ${book.author}</p>
+    <p class="publisher">Publisher: ${book.publisher}</p>
+    <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
     <button type="button">Add to shopping list</button>
   </li>`;
 
@@ -222,14 +222,105 @@ export function onRemoveFromShoppingList(e) {
   element.remove();
 }
 
+// Додавання об'єкта книги до localStorage без реквеста на сервер
+export async function onAddAndRemoveToLocalStorage(e) {
+  // if (e.target.textContent === 'Add to shopping list') {
+  //   const id = e.target.parentNode.id;
+  //   const book = await booksApi.getBook(id);
+  //   if (localStorageItems.find(item => item.id === id)) return;
+  //   e.target.textContent = 'Remove from shopping list';
+  //   localStorageItems.push(book);
+  //   localStorage.setItem('books', JSON.stringify(localStorageItems));
+
+  //   return;
+  // }
+
+  const bookElement = e.target.closest('.book');
+  if (!bookElement) return;
+  const id = bookElement.id;
+  const title = bookElement.querySelector('h3').textContent;
+  const author = bookElement.querySelector('.author').textContent;
+  const publisher = bookElement.querySelector('.publisher').textContent;
+  const bookImage = bookElement.querySelector('img').src;
+  const amazonProductUrl = bookElement.querySelector('.amazon-link').href;
+
+  const book = {
+    _id: id,
+    title: title,
+    author: author,
+    publisher: publisher,
+    book_image: bookImage,
+    amazon_product_url: amazonProductUrl,
+  };
+
+  // if (e.target.textContent === 'Remove from shopping list') {
+  //   const id = e.target.parentNode.id;
+  //   const index = localStorageItems.findIndex(item => item.id === id);
+  //   if (index !== -1) {
+  //     localStorageItems.splice(index, 1);
+  //     localStorage.setItem('books', JSON.stringify(localStorageItems));
+  //     e.target.textContent = 'Add to shopping list';
+
+  //     return;
+  //   }
+  // }
+
+  if (e.target.textContent === 'Add to shopping list') {
+    if (localStorageItems.find(item => item._id === id)) return;
+    e.target.textContent = 'Remove from shopping list';
+    localStorageItems.push(book);
+    localStorage.setItem('books', JSON.stringify(localStorageItems));
+  } else if (e.target.textContent === 'Remove from shopping list') {
+    const index = localStorageItems.findIndex(item => item._id === id);
+    if (index !== -1) {
+      localStorageItems.splice(index, 1);
+      localStorage.setItem('books', JSON.stringify(localStorageItems));
+      e.target.textContent = 'Add to shopping list';
+    }
+  }
+}
+
+// Рендер Shopping list без реквеста на сервер
+export function renderShoppingListFromLocalStorage() {
+  try {
+    const localStorageItems = JSON.parse(localStorage.getItem('books')) || [];
+    if (!localStorageItems) return;
+    localStorageItems.forEach(book =>
+      renderBookFromLocalStorageWithoutFetch(book)
+    );
+  } catch (error) {
+    console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
+  }
+}
+
+// Рендер книги без реквеста на сервер
+export function renderBookFromLocalStorageWithoutFetch(book) {
+  const markup = `
+  <li id="${book._id}">
+    <img src="${book.book_image}" alt="${book.title}">
+    <h3>${book.title}</h3>
+    <p>${book.author}</p>
+    <p>${book.publisher}</p>
+    <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+    <button type="button">Remove from shopping list</button>
+  </li>`;
+
+  shoppingList.insertAdjacentHTML('beforeend', markup);
+}
+
 // Додаємо слухачі подій для рендера окремої категорії, відкриття модалки, додавання та видалення до Shopping List
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openModal);
-categoryItem.addEventListener('click', onAddAndRemoveToShoppingListOnModal);
+categoryItem.addEventListener('click', onAddAndRemoveToLocalStorage);
 shoppingList.addEventListener('click', onRemoveFromShoppingList);
 
 // Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
 renderBooksList();
 renderTopBooks();
-renderShoppingList();
+renderShoppingListFromLocalStorage();
