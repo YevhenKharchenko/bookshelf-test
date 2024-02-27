@@ -4,7 +4,7 @@ import 'tui-pagination/dist/tui-pagination.css';
 // Створюємо масив для збереження книг у localStorage
 const localStorageItems = JSON.parse(localStorage.getItem('books')) || [];
 
-const container = document.getElementById('tui-pagination-container');
+const container = document.querySelector('tui-pagination');
 const shoppingList = document.querySelector('.shopping-list');
 
 const pagination = new Pagination(container, {
@@ -13,8 +13,6 @@ const pagination = new Pagination(container, {
   visiblePages: 3, // Set the number of visible pages
   page: 1, // Set the initial page
 });
-
-console.log(pagination);
 
 // Handle page change event
 pagination.on('afterMove', function (eventData) {
