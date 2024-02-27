@@ -1,3 +1,5 @@
+import * as basicLightbox from 'basiclightbox';
+import 'basiclightbox/dist/basicLightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import { BooksApi } from './books-api.js';
@@ -323,9 +325,69 @@ export function renderBookFromLocalStorageWithoutFetch(book) {
 // Додаємо слухачі подій для рендера окремої категорії, відкриття модалки, додавання та видалення до Shopping List
 categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
-categoryItem.addEventListener('click', openModal);
-categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
+// categoryItem.addEventListener('click', openModal);
+// categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
+
+categoryItem.addEventListener('click', openBasicModal);
 
 // Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
 renderBooksList();
 renderTopBooks();
+
+async function openBasicModal(e) {
+  e.preventDefault();
+
+  if (e.target.nodeName !== 'IMG') {
+    return;
+  }
+
+  e.stopPropagation();
+  const id = e.target.parentNode.id;
+  try {
+    const book = await booksApi.getBook(id);
+
+    let buttonText = 'Add to shopping list';
+
+    if (localStorageItems.findIndex(el => el._id === book._id) > -1) {
+      buttonText = 'Remove from shopping list';
+    }
+
+    const markup = `
+  <li class="book" id="${book._id}">
+    <img src="${book.book_image}" alt="${book.title}">
+    <h3>${book.title}</h3>
+    <p class="description">${book.description}</p>
+    <p class="author">Author: ${book.author}</p>
+    <p class="publisher">Publisher: ${book.publisher}</p>
+    <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
+    <button class="add-btn" type="button">${buttonText}</button>
+  </li>`;
+
+    const escapeKey = event => {
+      if (event.code === 'Escape') {
+        instance.close();
+      }
+    };
+
+    const instance = basicLightbox.create(markup, {
+      closable: false,
+      className: 'modal',
+      onShow: () => {
+        document.addEventListener('keydown', escapeKey);
+        document.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
+      },
+      onClose: () => {
+        document.removeEventListener('keydown', escapeKey);
+      },
+    });
+
+    instance.show();
+  } catch (error) {
+    console.log(error);
+    iziToast.error({
+      title: 'Error',
+      message: `Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${error.message}`,
+      position: 'topRight',
+    });
+  }
+}
