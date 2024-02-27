@@ -104,7 +104,13 @@ export async function renderCategory(category) {
 export async function renderBook(id) {
   try {
     const book = await booksApi.getBook(id);
-    console.log(book);
+
+    let buttonText = 'Add to shopping list';
+
+    if (localStorageItems.findIndex(el => el._id === book._id) > -1) {
+      buttonText = 'Remove from shopping list';
+    }
+
     const markup = `
   <li class="book" id="${book._id}">
     <img src="${book.book_image}" alt="${book.title}">
@@ -113,7 +119,7 @@ export async function renderBook(id) {
     <p class="author">Author: ${book.author}</p>
     <p class="publisher">Publisher: ${book.publisher}</p>
     <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
-    <button type="button">Add to shopping list</button>
+    <button class="add-btn" type="button">${buttonText}</button>
   </li>`;
 
     categoryItem.insertAdjacentHTML('beforeend', markup);
