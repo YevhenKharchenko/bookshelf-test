@@ -1,7 +1,7 @@
-import"./assets/modulepreload-polyfill-3cfb730f.js";import i from"https://cdn.skypack.dev/axios";async function r(o){const e=[];try{await Promise.all(o.map(async s=>{const t=`https://books-backend.p.goit.global/books/${s}`,a=await i.get(t);e.push(a.data)})),localStorage.setItem("booksArray",JSON.stringify(e))}catch(s){console.error("Error fetching books:",s)}}const n=["643282b1e85766588626a0dc","643282b1e85766588626a080","643282b1e85766588626a0b2","643282b1e85766588626a086","643282b1e85766588626a085"];r(n);const l=document.querySelector(".shopping-list");function c(o){const e=localStorage.getItem(o);try{const s=JSON.parse(e);console.log(s),s.forEach(t=>{const a=`<li class="shopping-list-item" data-id="${t._id}">
+import"./assets/modulepreload-polyfill-3cfb730f.js";/* empty css                             */import"https://cdn.skypack.dev/axios";import{P as l}from"./assets/vendor-e8675f53.js";const c=document.getElementById("tui-pagination-container"),p=new l(c);p.getCurrentPage();const g=document.querySelector(".shopping-list"),e=JSON.parse(localStorage.getItem("booksArray"))||[];function d(){try{if(!e)return;e.forEach(t=>m(t))}catch(t){console.log(t),iziToast.error({title:"Error",message:`Oops! Something went wrong. Please try again later or contact support if the issue persists. Error details: ${t.message}`,position:"topRight"})}}function m(t){const o=`<li class="shopping-list-item" data-id="${t._id}">
 
         <button type="button" class="delete-btn" title="Delete"> 
-        <svg class="delete-btn-icon" width="16" height="16"> <use href="/svg-sprite.svg#icon-trash"></use> </svg> </button> 
+        <div class="delete-btn-icon"> </div> </div> </button> 
 
         <div class="shopping-list-div-image"> <img class="shopping-list-image" src="${t.book_image}" alt="${t.title}"> </div> 
 
@@ -13,10 +13,13 @@ import"./assets/modulepreload-polyfill-3cfb730f.js";import i from"https://cdn.sk
         <div class="link-container"> 
         <p class="shopping-list-item-author">${t.author}</p>
         <div class=""link-wrapper>
-            <a class="amazon-icon" href="${t.amazon_product_url}" target="_blank" rel="noopener noreferrer nofollow">am</a>
-            <a class="apple-icon" href="${t.buy_links[1].url}" target="_blank" rel="noopener noreferrer nofollow">ap</a>
+            <a class="amazon-icon" href="${t.amazon_product_url}" target="_blank" rel="noopener noreferrer nofollow"> <div class="amazon-logo hover-items-amaz-books"> <img src="./png/amazon-1x.png" alt="Amazon" />
+            </div> </a>
+            <a class="apple-icon" href="${t.buy_links[1].url}" target="_blank" rel="noopener noreferrer nofollow"> <div class="apple-books-logo hover-items-amaz-books">
+            <img src="./png/amazon-book-1x.png" alt="Apple book"/>
+            </div> </a>
         </div>
         </div>
         </div>
-        </li>`;l.insertAdjacentHTML("beforeend",a)})}catch{return e}}c("booksArray");
+        </li>`;g.insertAdjacentHTML("beforeend",o)}d();const h=document.querySelectorAll(".delete-btn");h.forEach(t=>{t.addEventListener("click",u)});function u(t){const s=t.currentTarget.closest(".shopping-list-item"),n=s.dataset.id,r=e.filter(i=>i._id!==n);localStorage.setItem("booksArray",JSON.stringify(r)),s.remove();const a=e.findIndex(i=>i._id===n);e.splice(a,1),r.length===0&&localStorage.removeItem("booksArray"),toggleVisibility()}
 //# sourceMappingURL=commonHelpers3.js.map
