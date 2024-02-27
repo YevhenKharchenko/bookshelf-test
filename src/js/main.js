@@ -47,6 +47,7 @@ export async function renderTopBooks() {
         <div class="book" id="${book._id}">
           <img src="${book.book_image}" alt="${book.title}">
           <h3>${book.title}</h3>
+          <p class="description">${book.description}</p>
           <p class="author">Author: ${book.author}</p>
           <p class="publisher"=>Publisher: ${book.publisher}</p>
           <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
@@ -79,6 +80,7 @@ export async function renderCategory(category) {
       <div class="book" id="${book._id}">
         <img src="${book.book_image}" alt="${book.title}">
         <h3>${book.title}</h3>
+        <p class="description">${book.description}</p>
         <p class="author">Author: ${book.author}</p>
         <p class="publisher">Publisher: ${book.publisher}</p>
         <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
@@ -102,11 +104,12 @@ export async function renderCategory(category) {
 export async function renderBook(id) {
   try {
     const book = await booksApi.getBook(id);
-
+    console.log(book);
     const markup = `
   <li class="book" id="${book._id}">
     <img src="${book.book_image}" alt="${book.title}">
     <h3>${book.title}</h3>
+    <p class="description">${book.description}</p>
     <p class="author">Author: ${book.author}</p>
     <p class="publisher">Publisher: ${book.publisher}</p>
     <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
@@ -222,7 +225,23 @@ export function onRemoveFromShoppingList(e) {
   element.remove();
 }
 
-// Додавання об'єкта книги до localStorage без реквеста на сервер
+// Видалення елемента з Shopping List
+export function onRemoveFromShoppingListAndLocalStorage(e) {
+  if (e.target.nodeName !== 'BUTTON') return;
+
+  const element = e.target.parentNode;
+  const id = element.id;
+  const index = localStorageItems.findIndex(item => item._id === id);
+
+  if (index !== -1) {
+    localStorageItems.splice(index, 1);
+    localStorage.setItem('books', JSON.stringify(localStorageItems));
+  }
+
+  element.remove();
+}
+
+// Додавання та видалення об'єкта книги до localStorage без реквеста на сервер
 export async function onAddAndRemoveToLocalStorageOnModal(e) {
   const bookElement = e.target.closest('.book');
 
@@ -230,6 +249,7 @@ export async function onAddAndRemoveToLocalStorageOnModal(e) {
 
   const id = bookElement.id;
   const title = bookElement.querySelector('h3').textContent;
+  const description = bookElement.querySelector('.description').textContent;
   const author = bookElement.querySelector('.author').textContent;
   const publisher = bookElement.querySelector('.publisher').textContent;
   const bookImage = bookElement.querySelector('img').src;
@@ -238,6 +258,7 @@ export async function onAddAndRemoveToLocalStorageOnModal(e) {
   const book = {
     _id: id,
     title: title,
+    description: description,
     author: author,
     publisher: publisher,
     book_image: bookImage,
@@ -283,6 +304,7 @@ export function renderBookFromLocalStorageWithoutFetch(book) {
   <li id="${book._id}">
     <img src="${book.book_image}" alt="${book.title}">
     <h3>${book.title}</h3>
+    <p>${book.description}</p>
     <p>${book.author}</p>
     <p>${book.publisher}</p>
     <a href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
@@ -297,7 +319,7 @@ categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openModal);
 categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
-shoppingList.addEventListener('click', onRemoveFromShoppingList);
+shoppingList.addEventListener('click', onRemoveFromShoppingListAndLocalStorage);
 
 // Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
 renderBooksList();
