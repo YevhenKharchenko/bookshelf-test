@@ -1,15 +1,36 @@
 import Pagination from 'tui-pagination';
 import 'tui-pagination/dist/tui-pagination.css';
 
-const container = document.getElementById('tui-pagination-container');
-const instance = new Pagination(container);
-
-instance.getCurrentPage();
-
-const shoppingList = document.querySelector('.shopping-list');
-
 // Створюємо масив для збереження книг у localStorage
 const localStorageItems = JSON.parse(localStorage.getItem('books')) || [];
+
+const container = document.getElementById('tui-pagination-container');
+const shoppingList = document.querySelector('.shopping-list');
+
+const pagination = new Pagination(container, {
+  totalItems: localStorageItems.length, // Set the total number of items
+  itemsPerPage: 3, // Set the number of items per page
+  visiblePages: 3, // Set the number of visible pages
+  page: 1, // Set the initial page
+});
+
+console.log(pagination);
+
+// Handle page change event
+pagination.on('afterMove', function (eventData) {
+  renderBooks(eventData.page); // Render books based on the current page
+});
+
+function renderBooks(page) {
+  shoppingList.innerHTML = ''; // Clear the shopping list
+  const startIndex = (page - 1) * pagination._options.itemsPerPage;
+  const endIndex = startIndex + pagination._options.itemsPerPage;
+  const booksToRender = localStorageItems.slice(startIndex, endIndex);
+
+  booksToRender.forEach(book => {
+    renderBookFromLocalStorageWithoutFetch(book);
+  });
+}
 
 // Рендер Shopping list без реквеста на сервер
 export function renderShoppingListFromLocalStorage() {
@@ -56,6 +77,8 @@ export function onRemoveFromShoppingListAndLocalStorage(e) {
   if (index !== -1) {
     localStorageItems.splice(index, 1);
     localStorage.setItem('books', JSON.stringify(localStorageItems));
+    pagination.reset(localStorageItems.length); // Reset pagination with updated total items
+    renderBooks(pagination.getCurrentPage()); // Render books for the current page
   }
 
   element.remove();
@@ -63,4 +86,5 @@ export function onRemoveFromShoppingListAndLocalStorage(e) {
 
 shoppingList.addEventListener('click', onRemoveFromShoppingListAndLocalStorage);
 
-renderShoppingListFromLocalStorage();
+// Initial rendering
+renderBooks(1); // Render books for the first page
