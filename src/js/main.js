@@ -325,9 +325,7 @@ categoriesList.addEventListener('click', onGalleryItemClick);
 categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openModal);
 categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
-shoppingList.addEventListener('click', onRemoveFromShoppingListAndLocalStorage);
 
 // Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
 renderBooksList();
 renderTopBooks();
-renderShoppingListFromLocalStorage();
