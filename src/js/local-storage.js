@@ -12,6 +12,7 @@ const pagination = new Pagination(container, {
   itemsPerPage: 3, // Set the number of items per page
   visiblePages: 3, // Set the number of visible pages
   page: 1, // Set the initial page
+  centerAlign: true,
 });
 
 // Handle page change event

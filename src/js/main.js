@@ -262,6 +262,7 @@ export async function onAddAndRemoveToLocalStorageOnModal(e) {
   const publisher = bookElement.querySelector('.publisher').textContent;
   const bookImage = bookElement.querySelector('img').src;
   const amazonProductUrl = bookElement.querySelector('.amazon-link').href;
+  const modalText = bookElement.querySelector('.modal-text');
 
   const book = {
     _id: id,
@@ -274,12 +275,17 @@ export async function onAddAndRemoveToLocalStorageOnModal(e) {
   };
 
   if (e.target.textContent === 'Add to shopping list') {
+    modalText.style.display = 'block';
+
     if (localStorageItems.find(item => item._id === id)) return;
+
     e.target.textContent = 'Remove from shopping list';
     localStorageItems.push(book);
     localStorage.setItem('books', JSON.stringify(localStorageItems));
   } else if (e.target.textContent === 'Remove from shopping list') {
+    modalText.style.display = 'none';
     const index = localStorageItems.findIndex(item => item._id === id);
+
     if (index !== -1) {
       localStorageItems.splice(index, 1);
       localStorage.setItem('books', JSON.stringify(localStorageItems));
@@ -322,18 +328,6 @@ export function renderBookFromLocalStorageWithoutFetch(book) {
   shoppingList.insertAdjacentHTML('beforeend', markup);
 }
 
-// Додаємо слухачі подій для рендера окремої категорії, відкриття модалки, додавання та видалення до Shopping List
-categoriesList.addEventListener('click', onGalleryItemClick);
-categoryItem.addEventListener('click', onShowCategoryBtnClick);
-// categoryItem.addEventListener('click', openModal);
-// categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
-
-categoryItem.addEventListener('click', openBasicModal);
-
-// Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
-renderBooksList();
-renderTopBooks();
-
 async function openBasicModal(e) {
   e.preventDefault();
 
@@ -361,6 +355,7 @@ async function openBasicModal(e) {
     <p class="publisher">Publisher: ${book.publisher}</p>
     <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
     <button class="add-btn" type="button">${buttonText}</button>
+    <p class="modal-text">Сongratulations! You have added the book to the shopping list. To delete, press the button “Remove from the shopping list”.</p>
   </li>`;
 
     const escapeKey = event => {
@@ -370,7 +365,6 @@ async function openBasicModal(e) {
     };
 
     const instance = basicLightbox.create(markup, {
-      closable: false,
       className: 'modal',
       onShow: () => {
         document.addEventListener('keydown', escapeKey);
@@ -391,3 +385,14 @@ async function openBasicModal(e) {
     });
   }
 }
+
+// Додаємо слухачі подій для рендера окремої категорії, відкриття модалки, додавання та видалення до Shopping List
+categoriesList.addEventListener('click', onGalleryItemClick);
+categoryItem.addEventListener('click', onShowCategoryBtnClick);
+// categoryItem.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
+
+categoryItem.addEventListener('click', openBasicModal);
+
+// Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
+renderBooksList();
+renderTopBooks();
