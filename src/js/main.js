@@ -367,6 +367,12 @@ async function openBasicModal(e) {
     const instance = basicLightbox.create(markup, {
       className: 'modal',
       onShow: () => {
+        const modalText = instance.element().querySelector('.modal-text');
+
+        if (localStorageItems.find(item => item._id === id)) {
+          modalText.classList.add('visible');
+        }
+
         document.addEventListener('keydown', escapeKey);
         document.addEventListener('click', onAddAndRemoveToLocalStorageOnModal);
       },
