@@ -25,6 +25,19 @@ export async function renderBooksList() {
       .join('');
 
     categoriesList.insertAdjacentHTML('beforeend', markup);
+
+    const categoryLinks = document.querySelectorAll('.category-link');
+
+    categoryLinks.forEach(el => {
+      el.addEventListener('click', e => {
+        const activeCategory = document.querySelector('.category-link .active');
+
+        if (activeCategory) {
+          activeCategory.classList.remove('active');
+        }
+        e.target.classList.add('active');
+      });
+    });
   } catch (error) {
     console.log(error);
     iziToast.error({
@@ -80,7 +93,6 @@ export async function renderCategory(category) {
     const categoriesFirstPart = categoriesArray
       .slice(0, categoriesArray.length - 1)
       .join(' ');
-    console.log(categoriesLastWord);
 
     const categoryHeaderHTML = `<h2 class="category-header">${categoriesFirstPart} <span class="last-word-color">${categoriesLastWord}</span></h2>`;
     const markup = booksList
@@ -354,7 +366,7 @@ async function openBasicModal(e) {
     }
 
     const markup = `
-  <li class="book" id="${book._id}">
+  <div class="book" id="${book._id}">
     <img src="${book.book_image}" alt="${book.title}">
     <h3>${book.title}</h3>
     <p class="description">${book.description}</p>
@@ -363,7 +375,7 @@ async function openBasicModal(e) {
     <a class="amazon-link" href="${book.amazon_product_url}" target="_blank">Buy on Amazon</a>
     <button class="add-btn" type="button">${buttonText}</button>
     <p class="modal-text">Сongratulations! You have added the book to the shopping list. To delete, press the button “Remove from the shopping list”.</p>
-  </li>`;
+  </div>`;
 
     const escapeKey = event => {
       if (event.code === 'Escape') {
