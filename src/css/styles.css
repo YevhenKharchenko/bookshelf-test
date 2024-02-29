@@ -30,3 +30,7 @@
 .visible {
   display: block;
 }
+
+.last-word-color {
+  color: #4f2ee8;
+}

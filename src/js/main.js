@@ -75,7 +75,14 @@ export async function renderCategory(category) {
   try {
     const booksList = await booksApi.getCategory(category);
 
-    const categoryHeaderHTML = `<h2>${category}</h2>`;
+    const categoriesArray = category.split(' ');
+    const categoriesLastWord = categoriesArray[categoriesArray.length - 1];
+    const categoriesFirstPart = categoriesArray
+      .slice(0, categoriesArray.length - 1)
+      .join(' ');
+    console.log(categoriesLastWord);
+
+    const categoryHeaderHTML = `<h2 class="category-header">${categoriesFirstPart} <span class="last-word-color">${categoriesLastWord}</span></h2>`;
     const markup = booksList
       .map(book => {
         return `
