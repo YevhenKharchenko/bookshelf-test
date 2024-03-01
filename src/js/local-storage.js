@@ -8,20 +8,19 @@ const container = document.querySelector('.tui-pagination');
 const shoppingList = document.querySelector('.shopping-list');
 
 const pagination = new Pagination(container, {
-  totalItems: localStorageItems.length, // Set the total number of items
-  itemsPerPage: 3, // Set the number of items per page
-  visiblePages: 3, // Set the number of visible pages
-  page: 1, // Set the initial page
+  totalItems: localStorageItems.length,
+  itemsPerPage: 3,
+  visiblePages: 3,
+  page: 1,
   centerAlign: true,
 });
 
-// Handle page change event
 pagination.on('afterMove', function (eventData) {
-  renderBooks(eventData.page); // Render books based on the current page
+  renderBooks(eventData.page);
 });
 
 function renderBooks(page) {
-  shoppingList.innerHTML = ''; // Clear the shopping list
+  shoppingList.innerHTML = '';
   const startIndex = (page - 1) * pagination._options.itemsPerPage;
   const endIndex = startIndex + pagination._options.itemsPerPage;
   const booksToRender = localStorageItems.slice(startIndex, endIndex);
@@ -76,8 +75,8 @@ export function onRemoveFromShoppingListAndLocalStorage(e) {
   if (index !== -1) {
     localStorageItems.splice(index, 1);
     localStorage.setItem('books', JSON.stringify(localStorageItems));
-    pagination.reset(localStorageItems.length); // Reset pagination with updated total items
-    renderBooks(pagination.getCurrentPage()); // Render books for the current page
+    pagination.reset(localStorageItems.length);
+    renderBooks(pagination.getCurrentPage());
   }
 
   element.remove();
@@ -85,5 +84,4 @@ export function onRemoveFromShoppingListAndLocalStorage(e) {
 
 shoppingList.addEventListener('click', onRemoveFromShoppingListAndLocalStorage);
 
-// Initial rendering
-renderBooks(1); // Render books for the first page
+renderBooks(1);

@@ -2,17 +2,85 @@ import * as basicLightbox from 'basiclightbox';
 import 'basiclightbox/dist/basicLightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import Swiper from 'swiper';
+import 'swiper/css';
+
 import { BooksApi } from './books-api.js';
 
 const booksApi = new BooksApi();
+
+const funds = [
+  {
+    title: 'Save the Children',
+    url: 'https://www.savethechildren.net/what-we-do/emergencies/ukraine-crisis',
+    img: null,
+  },
+  {
+    title: 'Project HOPE',
+    url: 'https://www.projecthope.org/country/ukraine/',
+    img: null,
+  },
+  {
+    title: 'UNITED24',
+    url: 'https://u24.gov.ua/uk',
+    img: null,
+  },
+  {
+    title: 'International Medical Corps',
+    url: 'https://internationalmedicalcorps.org/country/ukraine/',
+    img: null,
+  },
+  {
+    title: 'Medicins Sans Frontieres',
+    url: 'https://www.msf.org/ukraine',
+    img: null,
+  },
+  {
+    title: 'RAZOM',
+    url: 'https://www.razomforukraine.org/',
+    img: null,
+  },
+  {
+    title: 'Action against hunger',
+    url: 'https://www.actionagainsthunger.org/location/europe/ukraine/',
+    img: null,
+  },
+  {
+    title: 'World vision',
+    url: 'https://www.wvi.org/emergencies/ukraine',
+    img: null,
+  },
+  {
+    title: 'Serhiy Prytula Charity Foundation',
+    url: 'https://prytulafoundation.org/en',
+    img: null,
+  },
+];
 
 // Створюємо три змінні для додавання до них розмітки, вони мають посилатися на 3 елемента <ul> в html
 const categoriesList = document.querySelector('.categories-list');
 const categoryItem = document.querySelector('.category');
 const shoppingList = document.querySelector('.shopping-list');
+const fundsList = document.querySelector('.funds-list');
 
 // Створюємо масив для збереження книг у localStorage
 const localStorageItems = JSON.parse(localStorage.getItem('books')) || [];
+
+function renderFunds(arr) {
+  let num = 0;
+
+  const markup = arr
+    .map(({ title, url, img }) => {
+      num++;
+      return `
+  <div class="swiper-slide">
+   ${num} <a href="${url}" target="_blank">${title}</a>
+  </div>`;
+    })
+    .join('');
+
+  fundsList.insertAdjacentHTML('beforeend', markup);
+}
 
 export async function renderBooksList() {
   try {
@@ -20,7 +88,7 @@ export async function renderBooksList() {
     const markup = categories
       .map(
         ({ list_name }) =>
-          `<a class="category-link" href=""><li>${list_name}</li></a>`
+          `<li class="category-link"><a href="">${list_name}</a></li>`
       )
       .join('');
 
@@ -419,5 +487,6 @@ categoryItem.addEventListener('click', onShowCategoryBtnClick);
 categoryItem.addEventListener('click', openBasicModal);
 
 // Рендер списка категорій, топ-5 книг кожної категорії та Shopping List, де рендеряться об'єкти з localStorage
+renderFunds(funds);
 renderBooksList();
 renderTopBooks();
