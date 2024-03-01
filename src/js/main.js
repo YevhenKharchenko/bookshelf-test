@@ -61,7 +61,7 @@ const funds = [
 const categoriesList = document.querySelector('.categories-list');
 const categoryItem = document.querySelector('.category');
 const shoppingList = document.querySelector('.shopping-list');
-const fundsList = document.querySelector('.funds-list');
+const fundsList = document.querySelector('#funds-list');
 
 // Створюємо масив для збереження книг у localStorage
 const localStorageItems = JSON.parse(localStorage.getItem('books')) || [];
@@ -80,6 +80,20 @@ function renderFunds(arr) {
     .join('');
 
   fundsList.insertAdjacentHTML('beforeend', markup);
+
+  const swiper = new Swiper('.swiper-container', {
+    loop: true,
+    slidesPerView: 3,
+    spaceBetween: 30,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+  });
 }
 
 export async function renderBooksList() {
@@ -98,6 +112,7 @@ export async function renderBooksList() {
 
     categoryLinks.forEach(el => {
       el.addEventListener('click', e => {
+        console.log(e.target);
         const activeCategory = document.querySelector('.category-link .active');
 
         if (activeCategory) {
