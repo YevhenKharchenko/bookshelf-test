@@ -15,9 +15,9 @@
     
     <script type="module" crossorigin src="/bookshelf-test/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/bookshelf-test/assets/modulepreload-polyfill-3cfb730f.js">
-    <link rel="modulepreload" crossorigin href="/bookshelf-test/assets/vendor-99c659b4.js">
+    <link rel="modulepreload" crossorigin href="/bookshelf-test/assets/vendor-fa016dd5.js">
     <link rel="stylesheet" href="/bookshelf-test/assets/vendor-0d5fc861.css">
-    <link rel="stylesheet" href="/bookshelf-test/assets/index-1f8ef346.css">
+    <link rel="stylesheet" href="/bookshelf-test/assets/index-2ef00eeb.css">
   </head>
   <body>
     <header class="header">
@@ -32,9 +32,12 @@
 </header>
 
     <!-- Loads the specified .html file -->
-    <aside class="support">
-  <div class="funds-list"></div>
-</aside>
+    <div class="swiper-container">
+  <div class="swiper-wrapper" id="funds-list"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
 <ul class="categories-list">
   List of categories
 </ul>
