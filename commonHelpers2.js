@@ -1,4 +1,4 @@
-import"./assets/modulepreload-polyfill-3cfb730f.js";import{P as p}from"./assets/vendor-64d08f96.js";const n=JSON.parse(localStorage.getItem("books"))||[],g=document.querySelector(".tui-pagination"),a=document.querySelector(".shopping-list"),o=new p(g,{totalItems:n.length,itemsPerPage:3,visiblePages:3,page:1,centerAlign:!0});o.on("afterMove",function(e){c(e.page)});function c(e){a.innerHTML="";const t=(e-1)*o._options.itemsPerPage,i=t+o._options.itemsPerPage;n.slice(t,i).forEach(s=>{l(s)})}function l(e){const t=`
+import"./assets/modulepreload-polyfill-3cfb730f.js";import{P as p}from"./assets/vendor-99c659b4.js";const n=JSON.parse(localStorage.getItem("books"))||[],g=document.querySelector(".tui-pagination"),a=document.querySelector(".shopping-list"),o=new p(g,{totalItems:n.length,itemsPerPage:3,visiblePages:3,page:1,centerAlign:!0});o.on("afterMove",function(e){c(e.page)});function c(e){a.innerHTML="";const t=(e-1)*o._options.itemsPerPage,i=t+o._options.itemsPerPage;n.slice(t,i).forEach(s=>{l(s)})}function l(e){const t=`
   <li id="${e._id}">
     <img src="${e.book_image}" alt="${e.title}">
     <h3>${e.title}</h3>
