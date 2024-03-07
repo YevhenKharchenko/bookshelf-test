@@ -3,7 +3,10 @@ import 'basiclightbox/dist/basicLightbox.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 import { BooksApi } from './books-api.js';
 
@@ -82,6 +85,7 @@ function renderFunds(arr) {
   fundsList.insertAdjacentHTML('beforeend', markup);
 
   const swiper = new Swiper('.swiper-container', {
+    modules: [Navigation, Pagination],
     loop: true,
     slidesPerView: 3,
     spaceBetween: 30,
@@ -92,6 +96,9 @@ function renderFunds(arr) {
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
+    },
+    scrollbar: {
+      el: '.swiper-scrollbar',
     },
   });
 }
